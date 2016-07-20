@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="blueHarvest">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Bungee|Bungee+Hairline|Josefin+Sans|Lora|Merriweather:400,700|Rasa:300" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Oswald:300, 400, 700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans:300" rel="stylesheet">
+  <!--script src="bower_components/angular/angular.js"></script-->
+  <!--script src="bower_components/angular-route/angular-route.js"></script-->
+  <script src="app.js"></script>
+  <script src="containerView/index.js"></script>
+  <script src="components/version/version.js"></script>
+  <script src="components/version/version-directive.js"></script>
+  <script src="components/version/interpolate-filter.js"></script>
+  <meta charset="UTF-8">
+  <title>Blue Harvest</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+
+      margin: 0;
+
+      background-image: url("../img.png");
+
+      font-family: 'Raleway', sans-serif;
+    }
+
+    img {
+        margin: 0.5em;
+        height: 3.5em;
+        width: 3.5em;
+
+        border-radius: 50%;
+
+        border: solid #cfd3dd;
+
+        /*
+        margin-top: 0.2em;
+        margin-left: 0.2em;
+        */
+    }
+
+    object {
+        width: 100%;
+        height: 100%;
+    }
+
+    #refineModule > div > div.titleBar {
+        border-bottom: solid 0.1em #FFFFFF;
+    }
+
+    #blurBox {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+
+        height: 90%;
+        width: 100%;
+        z-index: 2;
+
+        background: rgba(255, 255, 255, 0.9);
+
+        -webkit-transition: all 2s; /* For Safari 3.1 to 6.0 */
+        transition: all 2s;
+    }
+
+    #refineModule {
+        position: absolute;
+        bottom: 1em;
+        left: 0.75em;
+
+        height: calc(100% - 2em);
+        width: 20%;
+
+        z-index: 3;
+
+        background: rgba(51,60,68, 1);
+
+        display: flex;
+        flex-direction: column;
+
+
+    }
+
+    #refineFilter {
+        width: 100%;
+        height: 50%;
+
+        background: #cfd3dd;
+    }
+
+    #refineSort {
+        width: 100%;
+        height: 30%;
+
+        background: #cfd3dd;
+
+        border-top: solid 0.5em #FFFFFF;
+        border-bottom: solid 0.5em #FFFFFF;
+    }
+
+    #refineView {
+        width: 100%;
+        height: 20%;
+
+        background: #cfd3dd;
+    }
+
+    #backButton {
+        float: left;
+
+        color: transparent;
+
+        margin-left: 1em;
+    }
+
+    #uglyHack {
+        float: right;
+
+        margin-right: 1em;
+
+        color: transparent;
+    }
+
+    #newsFeed > div > div.titleBar {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .newsTitleBar {
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        flex-direction: row;
+    }
+
+    #newsDataContainer {
+        display: flex;
+        flex-direction: column;
+
+        margin-right: 0.2em;
+        margin-top: 0.2em;
+        margin-bottom: 0.2em;
+
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
+    }
+    
+    .newsContent {
+        width: 100%;
+    }
+    
+    .newsName {
+        padding-left: 5px;
+        padding-right: 5px;
+
+        font-family: 'Lucida Grande', Tahoma, Verdana, Arial, sans-serif;
+        font-size: 0.75em;
+    }
+
+    .newsDate {
+        padding-left: 6px;
+        margin-top: 2px;
+        padding-right: 5px;
+
+        font-family: 'Lucida Grande', Tahoma, Verdana, Arial, sans-serif;
+        font-size: 0.6em;
+    }
+
+    .filler {
+      width: 100%;
+      height: 100%;
+
+      outline: 1px solid black;
+
+      overflow-y: hidden;
+
+      background: #ffffff;
+    }
+
+    #navigationBar {
+      width: 100%;
+      height:10%;
+      position: fixed;
+      top: 0;
+      left: 0;
+
+      outline: 1px solid black;
+
+      background: #FFFFFF;
+
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+
+      padding-left: 3em;
+      padding-right: 3em;
+    }
+
+    #contentContainer {
+      width: 100%;
+      height: 90%;
+
+      position: fixed;
+      bottom: 0;
+      left: 0;
+
+      display: flex;
+      flex-direction: row;
+
+      outline: 1px solid black;
+    }
+
+    #bountyList {
+      height: 100%;
+      width: 50%;
+
+      padding: 20px;
+
+      overflow-y: scroll;
+    }
+
+    #bountyList > .filler {
+      outline: none !important;
+      background: none !important;
+
+      overflow-y: visible;
+    }
+
+    #bounty {
+      width: 100%;
+      height: 7em;
+
+      outline: 1px solid black;
+
+      margin-bottom: 3em;
+
+      background: #ffffff;
+
+      box-shadow: 2px 2px 2px #AAAAAA;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    #bountyTitle {
+      width: 100%;
+      height: 2em;
+
+      background: #cfd3dd;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 1.1em;
+    }
+
+    #bountyFooter {
+      width: 100%;
+      height: 1.75em;
+
+      padding-left: 1em;
+
+      font-family: 'Rasa', serif;
+      font-size: 0.8em;
+    }
+
+    #newsFeed {
+      height: 100%;
+      width: 30%;
+
+      padding: 20px;
+    }
+
+    #newsFeedContentContainer {
+      width: 100%;
+      height: calc(100% - 3em);
+
+      overflow-y: scroll;
+
+      font-family: 'Rasa', serif;
+    }
+
+    .newsItem {
+      width: 100%;
+      min-height: 3em;
+      height: auto;
+
+      outline: 1px black solid;
+
+      display: flex;
+        flex-direction: column;
+    }
+
+    .newsItem > div {
+    }
+
+    #chat {
+      height: 100%;
+      width: 20%;
+
+      padding: 20px;
+    }
+
+    .titleBar {
+      width: 100%;
+      height: 3em;
+
+      background-color: #cfd3dd;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 600;
+    }
+
+    #navigationBar > div {
+      height: 100%;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      font-size: 4em;
+      font-style: normal;
+      color: #7D26EF;
+    }
+
+    #navigationBar > div:hover {
+      color: #000000;
+    }
+
+    #bountyTitle > div {
+      margin-left: 1em;
+      margin-right: 1em;
+
+    }
+
+  </style>
+</head>
+<body ng-controller="KingController as King">
+<div id="navigationBar">
+    <div>BLU</div>
+  <div>DISCOVER</div>
+  <div ng-click="King.refinement.clicked = !King.refinement.clicked">REFINE</div>
+  <div>SEARCH</div>
+  <div id="unome">ABOUT</div>
+</div>
+<div id="blurBox" ng-show="King.refinement.clicked">
+    <div id="refineModule">
+        <div id="refineView">
+            <div class="titleBar">View</div>
+        </div>
+        <div id="refineSort">
+            <div class="titleBar">Sort</div>
+        </div>
+        <div id="refineFilter">
+            <div class="titleBar">Filter</div>
+        </div>
+    </div>
+</div>
+<div id="contentContainer" class="container">
+  <div id="bountyList">
+    <div class="filler container">
+      <div id="bounty">
+        <div id="bountyTitle">
+          <div>projects: 15</div>
+          <div>contributors: 42</div>
+          <div>views: 4261</div>
+          <div>upvotes: 1249</div>
+          <div>downvotes: 1249</div>
+        </div>
+
+        <div id="bountyFooter">Submitted by Brandon 3 hours ago</div>
+      </div>
+
+      <div id="bounty">
+        <div id="bountyTitle">
+          <div>projects: 15</div>
+          <div>contributors: 42</div>
+          <div>views: 4261</div>
+          <div>upvotes: 1249</div>
+          <div>downvotes: 1249</div>
+        </div>
+
+        <div id="bountyFooter">Submitted by Brandon 3 hours ago</div>
+      </div>
+
+      <div id="bounty">
+        <div id="bountyTitle">
+          <div>projects: 15</div>
+          <div>contributors: 42</div>
+          <div>views: 4261</div>
+          <div>upvotes: 1249</div>
+          <div>downvotes: 1249</div>
+        </div>
+
+        <div id="bountyFooter">Submitted by Brandon 3 hours ago</div>
+      </div>
+
+      <div id="bounty">
+        <div id="bountyTitle">
+          <div>projects: 15</div>
+          <div>contributors: 42</div>
+          <div>views: 4261</div>
+          <div>upvotes: 1249</div>
+          <div>downvotes: 1249</div>
+        </div>
+
+        <div id="bountyFooter">Submitted by Brandon 3 hours ago</div>
+      </div>
+
+      <div id="bounty">
+        <div id="bountyTitle">
+          <div>projects: 15</div>
+          <div>contributors: 42</div>
+          <div>views: 4261</div>
+          <div>upvotes: 1249</div>
+          <div>downvotes: 1249</div>
+        </div>
+
+        <div id="bountyFooter">Submitted by Brandon 3 hours ago</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="newsFeed" ng-controller="NewsController as News">
+    <div class="filler">
+      <div class="titleBar">
+          <div id="backButton" ng-click="News.story.isActive && (News.story.isActive = false)" ng-style="News.story.isActive && {'color':'black'}">back</div>
+            <div id="newsFeedTitle">News Feed</div>
+          <div id="uglyHack">back</div>
+      </div>
+      <div id="newsFeedContentContainer">
+          <object ng-show="News.story.isActive" ng-attr-data="{{ News.story.url }}"></object>
+        <div ng-hide="News.story.isActive" class="newsItem" ng-style="News.clicked[newsItem._id] && {'color': '#ADB7C1'}" ng-click="News.onClick(newsItem)" ng-repeat="newsItem in News.newsItems">
+            <div class="newsTitleBar">
+                <img ng-src="{{ newsItem.image.thumbnail.contentUrl }}">
+                <div id="newsDataContainer">
+                    <div class="newsName">{{ newsItem.name | limitTo:150 }}</div>
+                    <div class="newsDate">{{ newsItem.datePublished | date }}</div>
+                </div>
+            </div>
+            <!--div class="newsContent">
+                {{ newsItem.provider[0].name}}
+            </div-->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="chat">
+    <div class="filler">
+        <div class="titleBar">
+            Chat
+        </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

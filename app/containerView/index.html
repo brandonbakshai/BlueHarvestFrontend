@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Bungee|Bungee+Hairline|Josefin+Sans|Lora|Merriweather:400,700|Rasa:300" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Oswald:300, 400, 700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans:300" rel="stylesheet">
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="app.js"></script>
+    <script src="containerView/index.js"></script>
+    <script src="components/version/version.js"></script>
+    <script src="components/version/version-directive.js"></script>
+    <script src="components/version/interpolate-filter.js"></script>
+    <meta charset="UTF-8">
+    <title>Blue Harvest</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+
+            margin: 0;
+
+            background-image: url("../../img.png");
+
+            font-family: 'Raleway', sans-serif;
+        }
+
+        .filler {
+            width: 100%;
+            height: 100%;
+
+            outline: 1px solid black;
+
+            overflow-y: hidden;
+
+            background: #ffffff;
+        }
+
+        #navigationBar {
+            width: 100%;
+            height:10%;
+            position: fixed;
+            top: 0;
+            left: 0;
+
+            outline: 1px solid black;
+
+            background: #FFFFFF;
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+
+            font-family: 'Bungee', cursive;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+
+            padding-left: 3em;
+            padding-right: 3em;
+        }
+
+        #contentContainer {
+            width: 100%;
+            height: 90%;
+
+            position: fixed;
+            bottom: 0;
+            left: 0;
+
+            display: flex;
+            flex-direction: row;
+
+            outline: 1px solid black;
+        }
+
+        #bountyList {
+            height: 100%;
+            width: 50%;
+
+            padding: 20px;
+
+            overflow-y: scroll;
+        }
+
+        #bountyList > .filler {
+            outline: none !important;
+            background: none !important;
+
+            overflow-y: visible;
+        }
+
+        #bounty {
+            width: 100%;
+            height: 7em;
+
+            outline: 1px solid black;
+
+            margin-bottom: 3em;
+
+            background: #ffffff;
+
+            box-shadow: 2px 2px 2px #AAAAAA;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        #bountyTitle {
+            width: 100%;
+            height: 2em;
+
+            background: #cfd3dd;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            font-family: 'Open Sans Condensed', sans-serif;
+            font-family: 'Rasa', serif;
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: 1.1em;
+        }
+
+        #bountyFooter {
+            width: 100%;
+            height: 1.75em;
+
+            padding-left: 1em;
+
+            font-family: 'Open Sans', sans-serif;
+            font-family: 'Rasa', serif;
+            font-size: 0.8em;
+        }
+
+        #newsFeed {
+            height: 100%;
+            width: 30%;
+
+            padding: 20px;
+        }
+        
+        #newsFeedContentContainer {
+            width: 100%;
+            height: calc(100% - 3em);
+
+            overflow-y: scroll;
+
+            font-family: 'Rasa', serif;
+        }
+
+        .newsItem {
+            width: 100%;
+            min-height: 5em;
+            height: auto;
+
+            outline: 1px black solid;
+
+            display: flex;
+            align-items: left;
+            justify-content: flex-start;
+        }
+
+        .newsItemTest {
+            width: 100%;
+            min-height: 7em;
+            height: auto;
+
+            outline: 1px black solid;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .newsItem > div {
+            margin-left: 0.5em;
+            margin-top: 0.5em;
+        }
+
+        #chat {
+            height: 100%;
+            width: 20%;
+
+            padding: 20px;
+        }
+
+        .titleBar {
+            width: 100%;
+            height: 3em;
+
+            background-color: #cfd3dd;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            /*
+            font-family: 'Bungee Hairline', cursive;
+            font-style: italic;
+            */
+            font-family: 'Josefin Sans', sans-serif;
+            font-weight: 600;
+        }
+
+        #navigationBar > div {
+            height: 100%;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            font-size: 4em;
+            font-style: normal;
+            color: #7D26EF;
+        }
+        
+        #navigationBar > div:hover {
+            color: #000000;
+        }
+
+        #bountyTitle > div {
+            margin-left: 1em;
+            margin-right: 1em;
+
+        }
+
+    </style>
+</head>
+<body>
+<div id="navigationBar">
+    <div>DISCOVER</div>
+    <div>FILTER</div>
+    <div>SORT</div>
+    <div>SEARCH</div>
+    <div id="unome">^</div>
+</div>
+<div id="contentContainer" class="container">
+    <div id="bountyList">
+        <div class="filler container">
+            <div id="bounty">
+                <div id="bountyTitle">
+                    <div>projects: 15</div>
+                    <div>contributors: 42</div>
+                    <div>views: 4261</div>
+                    <div>upvotes: 1249</div>
+                    <div>downvotes: 1249</div>
+                </div>
+
+                <div id="bountyFooter">Submitted by Brandon 3 hours ago</div>
+            </div>
+
+            <div id="bounty">
+                <div id="bountyTitle">
+                    <div>projects: 15</div>
+                    <div>contributors: 42</div>
+                    <div>views: 4261</div>
+                    <div>upvotes: 1249</div>
+                    <div>downvotes: 1249</div>
+                </div>
+
+                <div id="bountyFooter">Submitted by Brandon 3 hours ago</div>
+            </div>
+
+            <div id="bounty">
+                <div id="bountyTitle">
+                    <div>projects: 15</div>
+                    <div>contributors: 42</div>
+                    <div>views: 4261</div>
+                    <div>upvotes: 1249</div>
+                    <div>downvotes: 1249</div>
+                </div>
+
+                <div id="bountyFooter">Submitted by Brandon 3 hours ago</div>
+            </div>
+
+            <div id="bounty">
+                <div id="bountyTitle">
+                    <div>projects: 15</div>
+                    <div>contributors: 42</div>
+                    <div>views: 4261</div>
+                    <div>upvotes: 1249</div>
+                    <div>downvotes: 1249</div>
+                </div>
+
+                <div id="bountyFooter">Submitted by Brandon 3 hours ago</div>
+            </div>
+
+            <div id="bounty">
+                <div id="bountyTitle">
+                    <div>projects: 15</div>
+                    <div>contributors: 42</div>
+                    <div>views: 4261</div>
+                    <div>upvotes: 1249</div>
+                    <div>downvotes: 1249</div>
+                </div>
+
+                <div id="bountyFooter">Submitted by Brandon 3 hours ago</div>
+            </div>
+
+            <div id="bounty">
+                <div id="bountyTitle">
+                    <div>projects: 15</div>
+                    <div>contributors: 42</div>
+                    <div>views: 4261</div>
+                    <div>upvotes: 1249</div>
+                    <div>downvotes: 1249</div>
+                </div>
+
+                <div id="bountyFooter">Submitted by Brandon 3 hours ago</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="newsFeed">
+        <div class="filler">
+            <div class="titleBar">
+                News Feed
+            </div>
+            <div id="newsFeedContentContainer">
+                <div class="newsItem">
+                    <div>Obama recently was cool</div>
+                </div>
+                <div class="newsItem"></div>
+                <div class="newsItemTest"></div>
+                <div class="newsItem"></div>
+                <div class="newsItem"></div>
+                <div class="newsItemTest"></div>
+                <div class="newsItem"></div>
+                <div class="newsItemTest"></div>
+                <div class="newsItem"></div>
+                <div class="newsItem"></div>
+                <div class="newsItemTest"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="chat">
+        <div class="filler">
+            <div class="titleBar">
+                Chat
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
