@@ -8,7 +8,17 @@ angular.module('blueHarvest', [])
       url: '',
     };
     this.newsItems = [];
-    this.getMoreNews = getMoreNews;
+    this.getMoreNews = () => {
+      $http({
+        url: 'http://localhost:3000/news',
+        method: 'GET',
+        async: true,
+        cache: false
+      })
+      .then(data => this.newsItems.concat(data.data))
+      .then(newsItems => this.newsItems = newsItems)
+      .catch(err => console.log("Error: ${err}"));
+    };
     this.onClick = (newsItem) => {
       this.story.url = newsItem.url;
       this.story.isActive = true;
@@ -16,23 +26,8 @@ angular.module('blueHarvest', [])
       console.log(newsItem._id);
     };
 
-    (function getMoreNews() {
-      $http({
-        url: 'http://localhost:3000/news',
-        method: 'GET',
-        async: true,
-        cache: false
-      })
-      .then((data) => {
-        console.log(data);
-        return this.newsItems.concat(data);
-      })
-      .then((newsItems) => {
-        console.log(newsItems);
-        this.newsItems = newsItems;
-      })
-      .catch(err => console.log("Error: ${err}"));
-    }());
+    getMoreNews()
+
   })
   .controller('KingController', () => {
     this.refinement = {
