@@ -282,7 +282,7 @@
 
     #newsFeed {
       height: 100%;
-      width: 30%;
+      width: 25%;
 
       padding: 20px;
     }
@@ -312,7 +312,7 @@
 
     #chat {
       height: 100%;
-      width: 20%;
+      width: 25%;
 
       padding: 20px;
     }
@@ -377,6 +377,33 @@
     </div>
 </div>
 <div id="contentContainer" class="container">
+
+  <div id="newsFeed" ng-controller="NewsController as News">
+    <div class="filler">
+      <div class="titleBar">
+        <div id="backButton" ng-click="News.story.isActive && (News.story.isActive = false)" ng-style="News.story.isActive && {'color':'black'}">back</div>
+        <div id="newsFeedTitle">News Feed</div>
+        <div id="uglyHack">back</div>
+      </div>
+      <div id="newsFeedContentContainer">
+        <object ng-show="News.story.isActive" ng-attr-data="{{ News.story.url }}"></object>
+        <div ng-hide="News.story.isActive" class="newsItem" ng-style="News.clicked[newsItem._id] && {'color': '#ADB7C1'}" ng-click="News.onClick(newsItem)" ng-repeat="newsItem in News.newsItems">
+          <div class="newsTitleBar">
+            <img ng-src="{{ newsItem.image.thumbnail.contentUrl }}">
+            <div id="newsDataContainer">
+              <div class="newsName">{{ newsItem.name | limitTo:150 }}</div>
+              <div class="newsDate">{{ newsItem.datePublished | date }}</div>
+            </div>
+          </div>
+          <!--div class="newsContent">
+              {{ newsItem.provider[0].name}}
+          </div-->
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   <div id="bountyList">
     <div class="filler container">
       <div id="bounty">
@@ -441,30 +468,6 @@
     </div>
   </div>
 
-  <div id="newsFeed" ng-controller="NewsController as News">
-    <div class="filler">
-      <div class="titleBar">
-          <div id="backButton" ng-click="News.story.isActive && (News.story.isActive = false)" ng-style="News.story.isActive && {'color':'black'}">back</div>
-            <div id="newsFeedTitle">News Feed</div>
-          <div id="uglyHack">back</div>
-      </div>
-      <div id="newsFeedContentContainer">
-          <object ng-show="News.story.isActive" ng-attr-data="{{ News.story.url }}"></object>
-        <div ng-hide="News.story.isActive" class="newsItem" ng-style="News.clicked[newsItem._id] && {'color': '#ADB7C1'}" ng-click="News.onClick(newsItem)" ng-repeat="newsItem in News.newsItems">
-            <div class="newsTitleBar">
-                <img ng-src="{{ newsItem.image.thumbnail.contentUrl }}">
-                <div id="newsDataContainer">
-                    <div class="newsName">{{ newsItem.name | limitTo:150 }}</div>
-                    <div class="newsDate">{{ newsItem.datePublished | date }}</div>
-                </div>
-            </div>
-            <!--div class="newsContent">
-                {{ newsItem.provider[0].name}}
-            </div-->
-        </div>
-      </div>
-    </div>
-  </div>
 
   <div id="chat">
     <div class="filler">

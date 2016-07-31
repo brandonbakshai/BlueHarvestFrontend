@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('blueHarvest', [])
-  .controller('NewsController', ($http) => {
+  .controller('NewsController', function ($http) {
     this.clicked = {};
     this.story = {
       isActive: false,
@@ -15,10 +15,14 @@ angular.module('blueHarvest', [])
         async: true,
         cache: false
       })
-      .then(data => this.newsItems.concat(data.data))
-      .then(newsItems => this.newsItems = newsItems)
-      .catch(err => console.log("Error: ${err}"));
+      .then(data => {
+        this.newsItems = this.newsItems.concat(data.data);
+        console.log(data.data);
+      })
+      .catch(err => console.log(err));
     };
+
+
     this.onClick = (newsItem) => {
       this.story.url = newsItem.url;
       this.story.isActive = true;
@@ -26,7 +30,7 @@ angular.module('blueHarvest', [])
       console.log(newsItem._id);
     };
 
-    getMoreNews()
+    this.getMoreNews()
 
   })
   .controller('KingController', () => {
